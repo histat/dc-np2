@@ -11,7 +11,7 @@ void trace_fmt(const char *fmt, ...) {
 	va_start(ap, fmt);
 	vsprintf(buf, fmt, ap);
 	va_end(ap);
-	reportff("%s\n", buf);
+	printf("%s\n", buf);
 }
 
 #endif
