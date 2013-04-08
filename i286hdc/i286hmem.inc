@@ -1,0 +1,12 @@
+
+USE_HIMEM			=		0x110000
+
+VRAM_STEP			=		0x100000
+VRAM_B				=		0x0a8000
+VRAM_R				=		0x0b0000
+VRAM_G				=		0x0b8000
+VRAM_E				=		0x0e0000
+
+FONT_ADRS			=		0x110000
+ITF_ADRS			=		0x1f8000
+
