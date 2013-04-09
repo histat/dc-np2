@@ -202,47 +202,20 @@ np2.bin: $(DCELF)
 1NEKO.BIN: np2.bin
 	scramble $< $@
 
+NP2VER=$(shell grep 'NP2VER_CORE' ../np2ver.h | sed -e 's/[^"]*"\([^"]*\)".*/\1/' | sed -e 's/ver\.//' | sed -e 's/[^0-9]//')
+
 ip.txt: ip.txt.in
-	if [ $(shell echo $(shell  grep 'NP2VER_CORE' ../np2ver.h | sed -e 's/[^"]*"\([^"]*\)".*/\1/' | sed -e 's/ver\.//') | sed -e 's/[^0-9]//')  -ge 082 ]; then \
+	if [ $(shell echo $(NP2VER)) -ge 082 ]; then \
 	 ver=V$(NP2VER); \
 	else ver=git; fi; \
-	sed -e 's/[@]VERSION[@]/'"$$ver"/ -e 's/[@]DATE[@]/$(shell date '+%Y%m%d')/' < $< 
+	sed -e 's/[@]VERSION[@]/'"$$ver"/ -e 's/[@]DATE[@]/$(shell date '+%Y%m%d')/' < $< > $@ 
 
 IP.BIN: ip.txt
 	makeip ip.txt IP.BIN
 
-dist: 1NEKO.BIN IP.BIN
-	plain=np2-$(shell date '+%Y%m%d')-dreamcast-plainfiles \
-	source=np2-$(shell date '+%Y%m%d')-dreamcast-source \
-	$(MKDIR) disttmp/$(plain) && \
-	cp COPYING disttmp/$(plain) && \
-	cp README disttmp/$(plain) && \
-	cp IP.BIN disttmp/$(plain) && \
-	cp 1NEKO.BIN disttmp/$(plain) && \
-	(cd disttmp && tar cvf - $(plain)) | bzip2 -c > $(plain).tar.bz2
-	rm -rf disttmp/$(plain)
-	$(MKDIR) disttmp/$(source) && \
-	cp *.cpp *.h *.res *.str Makefile disttmp/$(source)/dc && \
-	cp -r common disttmp/$(source)/dc && \
-	cp -r fdd disttmp/$(source)/dc && \
-	cp -r menu disttmp/$(source)/dc && \
-	cp -r sh disttmp/$(source)/dc && \
-	cp ../*.c ../*.h ../*.tbl disttmp/$(source) && \
-	cp -r ../bios disttmp/$(source) && \
-	cp -r ../cbus disttmp/$(source) && \
-	cp -r ../codecnv disttmp/$(source) && \
-	cp -r ../common disttmp/$(source) && \
-	cp -r ../fdd disttmp/$(source) && \
-	cp -r ../generic disttmp/$(source) && \
-	cp -r ../font disttmp/$(source) && \
-	cp -r ../i286hdc disttmp/$(source) && \
-	cp -r ../io disttmp/$(source) && \
-	cp -r ../lio disttmp/$(source) && \
-	cp -r ../mem disttmp/$(source) && \
-	cp -r ../sound disttmp/$(source) && \
-	cp -r ../vram disttmp/$(source) && \
-	(cd disttmp && tar cvf - $(source)) | bzip2 -c > $(source).tar.bz2
-	rm -rf disttmp
+dist: all 1NEKO.BIN IP.BIN
+	sh release.sh all
+
 
 distclean:
 	$(RM) $(OBJBASE) $(BINBASE)
