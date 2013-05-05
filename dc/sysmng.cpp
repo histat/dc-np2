@@ -50,7 +50,7 @@ void sysmng_updatecaption(void) {
 				,workclock.khz / 1000, workclock.khz % 1000
 				,workclock.fps / 10, workclock.fps % 10);
 
-		reportf("%s\n",work);
+		printf("%s\n",work);
 	}
 }
 
