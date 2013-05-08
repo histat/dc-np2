@@ -462,6 +462,8 @@ BOOL scrnmng_create(UINT8 scrnmode)
 	
 	buffer = 0;
 
+	scrnmng_clear(TRUE);
+
   	return(SUCCESS);
 	
 scre_err:
