@@ -46,13 +46,14 @@ short dc_mouseaxis1;
 short dc_mouseaxis2;
 
 
-static char modulefile[MAX_PATH] = "/";
+static char modulefile[MAX_PATH] = "/NP2.BIN";
 
 
 NP2OSCFG	np2oscfg = {0, 0, 0, 0,
-						0, 0,
+						1, 0, {1, 2, 2, 1},
 						0, 0,
 						0};
+
 
 #define	MAX_FRAMESKIP		4
 
@@ -367,9 +368,9 @@ int main(void)
 	ui_init();
   
 	dosio_init();
-
 	file_setcd(modulefile);
-  
+	
+	
 	ccfile_init();
 
 	TRACEINIT();
@@ -387,10 +388,8 @@ int main(void)
 
 	initload();
 
-	if (!np2cfg.hdrvroot) {
-		strcpy(np2cfg.hdrvroot , modulefile);
-	}
-
+	scrnmng_clear(TRUE);
+	
 	softkbddc_initialize();
 
 	dckbd_bindinit();
@@ -402,8 +401,8 @@ int main(void)
 	commng_initialize();
 	sysmng_initialize();
 	taskmng_initialize();
-  
-	joy_init();
+
+	joymng_initialize();
 	pccore_init();
 	S98_init();
 

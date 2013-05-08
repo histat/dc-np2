@@ -21,6 +21,7 @@
 #include "filesel.h"
 #include "dlgcfg.h"
 #include "dlgscr.h"
+#include "dlgsnd.h"
 #include "dlgabout.h"
 #include "dcsys.h"
 #include "event.h"
@@ -361,10 +362,10 @@ static void sys_cmd(MENUID id) {
 		np2cfg.MOTOR ^= 1;
 		update |= SYS_UPDATECFG;
 		break;
-#if 0
-	case IDM_SNDOPT:
+
+	case MID_SNDOPT:
+		dlgsnd();
 		break;
-#endif
 
 	case MID_MEM640:
 		np2cfg.EXTMEM = 0;

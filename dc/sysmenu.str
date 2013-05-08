@@ -258,8 +258,7 @@ static const MSYSITEM s_device[] = {
 		{str_midiopt,		NULL,		MID_MPUPC98,		MENU_GRAY},
 		{str_midipanic,		NULL,		MID_MIDIPANIC,		0},
 		{NULL,				NULL,		MID_STATIC,			MENU_SEPARATOR},
-		{str_sndopt,		NULL,		MID_SNDOPT,			MENU_GRAY |
-															MENU_DELETED}};
+		{str_sndopt,		NULL,		MID_SNDOPT,			MENU_DELETED}};
 
 static const MSYSITEM s_other[] = {
 		{str_bmpsave,		NULL,		MID_BMPSAVE,		MENU_GRAY},

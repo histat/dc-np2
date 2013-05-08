@@ -5,14 +5,27 @@
 #include "dcsys.h"
 #include "event.h"
 
-#define	JOY_LEFT_BIT	0x04
-#define	JOY_RIGHT_BIT	0x08
-#define	JOY_UP_BIT	0x01
-#define	JOY_DOWN_BIT	0x02
-#define	JOY_BTN1_BIT	0x10
-#define	JOY_BTN2_BIT	0x20
+enum {
+	JOY_LEFT_BIT	= 0x04,
+	JOY_RIGHT_BIT	= 0x08,
+	JOY_UP_BIT		= 0x01,
+	JOY_DOWN_BIT	= 0x02,
+	JOY_BTN1_BIT	= 0x10,
+	JOY_BTN2_BIT	= 0x20
+};
 
-static REG8 joyflag = 0xff;
+static	REG8	joyflag = 0xff;
+static	UINT8	joypad1btn[4];
+
+void joymng_initialize(void) {
+
+	int			i;
+
+	for (i=0; i<4; i++) {
+		joypad1btn[i] = 0xff ^
+			((np2oscfg.JOY1BTN[i] & 3) << ((np2oscfg.JOY1BTN[i] & 4)?4:6));
+	}
+}
 
 UINT8 joymng_getstat(void) {
 
@@ -20,7 +33,7 @@ UINT8 joymng_getstat(void) {
 
 	joyflag = 0xff;
   
-	if (np2oscfg.bindcur == 0 )  {
+	if (np2oscfg.JOYPAD1 && np2oscfg.bindcur == 0)  {
       
 		if(Flag & JOY_LEFT) {
 			joyflag &= ~JOY_LEFT_BIT;
@@ -34,12 +47,18 @@ UINT8 joymng_getstat(void) {
 		}
 	}
 
-	if (np2oscfg.bindbtn == 0) {
+	if (np2oscfg.JOYPAD1 && np2oscfg.bindbtn == 0) {
 		if (Flag & JOY_A) {
-			joyflag &= (0xff ^ (JOY_BTN1_BIT<<2));
+			joyflag &= joypad1btn[0];							// ver0.28
 		}
 		if (Flag & JOY_B) {
-			joyflag &= (0xff ^ (JOY_BTN2_BIT)<<2);
+			joyflag &= joypad1btn[1];							// ver0.28
+		}
+		if (Flag & JOY_X) {
+			joyflag &= joypad1btn[2];							// ver0.28
+		}
+		if (Flag & JOY_Y) {
+			joyflag &= joypad1btn[3];							// ver0.28
 		}
 	}
   

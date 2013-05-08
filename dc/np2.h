@@ -4,14 +4,12 @@ typedef struct {
 	UINT8	DRAW_SKIP;
 	UINT8	F12KEY;
 	UINT8	resume;
-  
 	UINT8	JOYPAD1;
 	UINT8	JOYPAD2;
-  
+	UINT8	JOY1BTN[4];
 	UINT8	bindcur;
 	UINT8	bindbtn;
-  
-	UINT8	jastsnd;
+  	UINT8	jastsnd;
 } NP2OSCFG;
 
 #ifdef __cplusplus

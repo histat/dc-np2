@@ -9,5 +9,7 @@ UINT8 joymng_getstat(void);
 }
 #endif
 
-#define joy_init()
+
+void joymng_initialize(void);
 #define joymng_sync()
+
