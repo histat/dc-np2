@@ -88,10 +88,6 @@ typedef unsigned long DWORD;
 #endif
 
 #define	SUPPORT_HOSTDRV
-#define	SUPPORT_SASI
-//#define SUPPORT_ARC
-//#define SUPPORT_ZLIB
-//#define VERMOUTH_LIB
 #define SUPPORT_CRT15KHZ
 #define SUPPORT_SWSEEKSND
 

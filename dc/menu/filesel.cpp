@@ -196,23 +196,6 @@ void filesel_fdd(REG8 drv) {
 
 void filesel_hdd(REG8 drv) {
 
-	UINT		num;
-	OEMCHAR	*p;
-  
-	num = drv & 0x0f;
-	p = NULL;
-  
-	if (!(drv & 0x20)) {		// SASI/IDE
-		if (num < 2) {
-			p = np2cfg.sasihdd[num];
-		}
-	} else {						// SCSI
-#if defined(SUPPORT_SCSI)    
-		if (num < 4) {
-			p = np2cfg.scsihdd[num];
-		}
-#endif    
-	}
 	if (filesel.result) {
 		diskdrv_sethdd(drv, filesel.path);
 	}
@@ -240,7 +223,6 @@ static int init_file(File *di, int max_file, int type)
   
 	x= 0;
 	y = 0;
-  
 	n = 0;
   
 	if (!topfile) {
@@ -389,7 +371,7 @@ static int select_file(int drv, File *di, int num_items, int type)
 				switch (type) {
 	  
 				case HDD_FILE:
-					milstr_ncpy(np2cfg.sasihdd[drv], filesel.path, sizeof(np2cfg.sasihdd[0]));
+					
 					filesel_hdd(drv);
 					break;
 	  

@@ -15,11 +15,10 @@ make_bin() {
 	if [ ! -d $BINDIR ];then
 		mkdir -p disttmp/$BINDIR
 	fi 
-
 	
 	cp README disttmp/$BINDIR/
 	cp IP.BIN disttmp/$BINDIR/
-	cp 1NEKO.BIN disttmp/$BINDIR/
+	cp NP2.BIN disttmp/$BINDIR/
 	cd $BASE/disttmp/
 	zip -r $BINDIR.zip $BINDIR
 	cd $BASE
