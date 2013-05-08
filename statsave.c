@@ -391,7 +391,11 @@ static int statflag_writepath(STFLAGH sfh, const OEMCHAR *path,
 		sp.readonly = readonly;
 		fh = file_open_rb(path);
 		if (fh != FILEH_INVALID) {
+#ifndef __SDCARD__
 			file_getdatetime(fh, &sp.date, &sp.time);
+#else
+			file_getdatetime(path, &sp.date, &sp.time);
+#endif
 			file_close(fh);
 		}
 	}
@@ -411,7 +415,11 @@ static int statflag_checkpath(STFLAGH sfh, const OEMCHAR *devname) {
 	if (sp.path[0]) {
 		fh = file_open_rb(sp.path);
 		if (fh != FILEH_INVALID) {
+#ifndef __SDCARD__			
 			file_getdatetime(fh, &date, &time);
+#else
+			file_getdatetime(sp.path, &date, &time);
+#endif
 			file_close(fh);
 			if ((memcmp(&sp.date, &date, sizeof(date))) ||
 				(memcmp(&sp.time, &time, sizeof(time)))) {

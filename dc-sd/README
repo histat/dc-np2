@@ -1,0 +1,67 @@
+Neko Project II for Dreamcast
+=============================
+
+Dreamcast port of the Neko Project II PC-9801 emulator.
+
+Original Neko Project II site
+<URL:http://www.retropc.net/yui/np2.html>
+
+notes
+-----
+the emulator doesn't contain a PC-98 font rom.
+you can create a font from a Windows Japanease font.
+
+
+Installation
+------------
+put the BIOS, the fonts and image files in NP2 directory on your SD card.
+
+
+Controls
+--------
+Dreamcast controller:
+D-pad:		joystick movement
+Analog:		mouse movement
+A:		joystic button 1 ,press a key on virtual keyboard
+B:		joystic button 2 ,remove the background on virtual keyboard
+X:		left mouse button
+Y:		right mouse button
+R trigger:	bring/remove the virtual keyboard
+L trigger:	
+Start:		enter/exit the menu
+
+Dreamcast keyboard:
+likewise
+S3: into the menu
+
+Dreamcast mice:
+likewise
+
+Credits
+-------
+
+- PC-9801 Emulator Core
+
+Neko Project II by NP2 developer team
+
+- Dreamcast Library
+
+Libronin - A Dreamcast development library
+by Marcus Comstedt, Peter Bortas and Per Hedbor
+
+- FAT file system
+
+ FatFs by ChaN
+
+- SD card schematic and the source
+
+ SD Card interface for DC Serial by jj1odm
+
+
+Contact
+-------
+histat@users.sourceforge.net
+http://twitter.com/histat
+
+
+
