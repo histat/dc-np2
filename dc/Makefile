@@ -1,6 +1,6 @@
 RONIN = /usr/local/ronin
 
-#RELEASE_BUILD = 1
+RELEASE_BUILD = 0
 
 AS = sh-elf-as -little
 CC = sh-elf-gcc -ml -m4-single-only
@@ -84,7 +84,7 @@ COPT	= -Wall -O8 -fomit-frame-pointer -fno-exceptions -I$(RONIN)/include -I$(TAR
 	-I$(LIO) -I$(VRAM) -I$(SOUND) -I$(VERMOUTH) -I$(GETSND) -I$(FDD) -I$(FONT) -I$(GENERIC) \
 	-I$(MENU)
 
-ifdef RELEASE_BUILD
+ifeq "$(RELEASE_BUILD)" "1"
 COPT	+= -DNOSERIAL -DNODISP
 endif
 
@@ -162,10 +162,11 @@ DCOBJ	= $(OBJ)/strres.o $(OBJ)/milstr.o $(OBJ)/_memory.o		\
 	$(OBJ)/event.o $(OBJ)/ramsave.o $(OBJ)/tmpfile.o 		\
 	$(OBJ)/dc_softkbd.o $(OBJ)/vmu.o $(OBJ)/icon.o			\
 	$(OBJ)/sysmenu.o $(OBJ)/dlgabout.o $(OBJ)/filesel.o		\
-	$(OBJ)/dlgcfg.o $(OBJ)/dlgscr.o $(OBJ)/ui.o	 		\
+	$(OBJ)/dlgcfg.o $(OBJ)/dlgscr.o $(OBJ)/dlgsnd.o 		\
+	$(OBJ)/ui.o										 		\
 
 
-ifdef RELEASE_BUILD
+ifeq "$(RELEASE_BUILD)" "1"
 DCLIB	= -L$(RONIN)/lib -lronin-noserial -lz -lm
 else
 DCLIB	= -L$(RONIN)/lib -lronin -lz -lm
@@ -199,7 +200,7 @@ np2.strip.elf: $(DCELF)
 np2.bin: $(DCELF)
 	sh-elf-objcopy -S -R .stack -O binary $< $@
 
-1NEKO.BIN: np2.bin
+NP2.BIN: np2.bin
 	scramble $< $@
 
 NP2VER=$(shell grep 'NP2VER_CORE' ../np2ver.h | sed -e 's/[^"]*"\([^"]*\)".*/\1/' | sed -e 's/ver\.//' | sed -e 's/[^0-9]//')
@@ -213,15 +214,21 @@ ip.txt: ip.txt.in
 IP.BIN: ip.txt
 	makeip ip.txt IP.BIN
 
-dist: all 1NEKO.BIN IP.BIN
+ifeq "$(RELEASE_BUILD)" "1"
+dist: all NP2.BIN IP.BIN
+	make clean
+	make
 	sh release.sh all
-
+else
+dist:
+	@echo "set RELEASE_BUILD = 1"
+endif
 
 distclean:
 	$(RM) $(OBJBASE) $(BINBASE)
 
 clean:
-	$(RM) $(DCOBJ) $(DCELF) np2.bin np2.strip.elf IP.BIN ip.txt 1NEKO.BIN
+	$(RM) $(DCOBJ) $(DCELF) np2.bin np2.strip.elf IP.BIN ip.txt NP2.BIN
 
 
 $(OBJ)/strres.o		:	$(COMMON)/strres.c $(COMMON)/strres.h
@@ -1180,6 +1187,9 @@ $(OBJ)/dlgcfg.o		:	 $(MENU)/dlgcfg.cpp $(MENU)/dlgcfg.h
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/dlgscr.o		:	 $(MENU)/dlgscr.cpp $(MENU)/dlgscr.h
+	$(CC) $(COPT) -c $< -o $@
+
+$(OBJ)/dlgsnd.o		:	 $(MENU)/dlgsnd.cpp $(MENU)/dlgsnd.h
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/dlgabout.o		:	 $(MENU)/dlgabout.cpp $(MENU)/dlgabout.h
