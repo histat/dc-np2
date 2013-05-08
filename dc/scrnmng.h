@@ -70,6 +70,9 @@ void scrnmng_update(void);
 
 UINT16 scrnmng_makepal16(RGB32 pal32);
 
+void scrnmng_clear(BOOL logo);
+
+	
 #ifdef __cplusplus
 }
 #endif
