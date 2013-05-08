@@ -6,6 +6,7 @@ Peripherals   : E000F10
 Product No    : T0000
 Version       : @VERSION@
 Release Date  : @DATE@
-Boot Filename : 1NEKO.BIN
+Boot Filename : NP2.BIN
 SW Maker Name : wwwyuinejp
 Game Title    : Neko Project II for Dreamcast
+
