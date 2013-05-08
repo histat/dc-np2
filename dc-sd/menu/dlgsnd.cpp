@@ -144,25 +144,21 @@ static void dlgupdate(void)
 	}
 	
 	val = menudlg_getval(DID_PAD1_1A) + (menudlg_getval(DID_PAD1_2A) << 1);
-	printf(" %d\n",val);
 	if (np2oscfg.JOY1BTN[0] != (UINT8)val) {
 		np2oscfg.JOY1BTN[0] = (UINT8)val;
 		renewal = TRUE;
 	}
 	val = menudlg_getval(DID_PAD1_1B) + (menudlg_getval(DID_PAD1_2B) << 1);
-	printf(" %d\n",val);
 	if (np2oscfg.JOY1BTN[1] != (UINT8)val) {
 		np2oscfg.JOY1BTN[1] = (UINT8)val;
 		renewal = TRUE;
 	}
 	val = menudlg_getval(DID_PAD1_1C) + (menudlg_getval(DID_PAD1_2C) << 1);
-	printf(" %d\n",val);
 	if (np2oscfg.JOY1BTN[2] != (UINT8)val) {
 		np2oscfg.JOY1BTN[2] = (UINT8)val;
 		renewal = TRUE;
 	}
 	val = menudlg_getval(DID_PAD1_1D) + (menudlg_getval(DID_PAD1_2D) << 1);
-	printf(" %d\n",val);
 	if (np2oscfg.JOY1BTN[3] != (UINT8)val) {
 		np2oscfg.JOY1BTN[3] = (UINT8)val;
 		renewal = TRUE;

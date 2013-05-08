@@ -86,7 +86,7 @@ typedef unsigned long long	UINT64;
 #endif
 
 #define	SUPPORT_HOSTDRV
-#define VERMOUTH_LIB
+//#define VERMOUTH_LIB
 #define SUPPORT_CRT15KHZ
 #define SUPPORT_SWSEEKSND
 
