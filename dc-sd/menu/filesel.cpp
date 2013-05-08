@@ -469,7 +469,7 @@ void file_browser(int drv, int type)
 	if (last_type != type) {
 		topfile = 0;
 		sel = 0;
-		milstr_ncpy(filesel.path, "\\", NELEMENTS(filesel.path));
+		milstr_ncpy(filesel.path, "NP2", NELEMENTS(filesel.path));
     
 		last_type = type;
 	}
