@@ -216,8 +216,6 @@ IP.BIN: ip.txt
 
 ifeq "$(RELEASE_BUILD)" "1"
 dist: all NP2.BIN IP.BIN
-	make clean
-	make
 	sh release.sh all
 else
 dist:
