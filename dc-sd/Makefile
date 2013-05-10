@@ -197,10 +197,10 @@ $(DCELF): $(DCOBJ)
 np2.strip.elf: $(DCELF)
 	sh-elf-strip -o $@ $<
 
-np2.bin: $(DCELF)
+NP2.BIN: $(DCELF)
 	sh-elf-objcopy -S -R .stack -O binary $< $@
 
-NP2.BIN: np2.bin
+1ST_READ.BIN: NP2.BIN
 	scramble $< $@
 
 NP2VER=$(shell grep 'NP2VER_CORE' ../np2ver.h | sed -e 's/[^"]*"\([^"]*\)".*/\1/' | sed -e 's/ver\.//' | sed -e 's/[^0-9]//')
@@ -215,7 +215,7 @@ IP.BIN: ip.txt
 	makeip ip.txt IP.BIN
 
 ifeq "$(RELEASE_BUILD)" "1"
-dist: all NP2.BIN IP.BIN
+dist: all 1ST_READ.BIN IP.BIN
 	sh release.sh all
 else
 dist:
@@ -226,7 +226,7 @@ distclean:
 	$(RM) $(OBJBASE) $(BINBASE)
 
 clean:
-	$(RM) $(DCOBJ) $(DCELF) np2.bin np2.strip.elf IP.BIN ip.txt NP2.BIN
+	$(RM) $(DCOBJ) $(DCELF) np2.strip.elf IP.BIN ip.txt NP2.BIN 1ST_READ.BIN
 
 
 $(OBJ)/strres.o		:	$(COMMON)/strres.c $(COMMON)/strres.h

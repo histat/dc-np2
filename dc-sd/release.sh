@@ -19,6 +19,7 @@ make_bin() {
 	cp README disttmp/$BINDIR/
 	cp IP.BIN disttmp/$BINDIR/
 	cp NP2.BIN disttmp/$BINDIR/
+	cp 1ST_READ.BIN disttmp/$BINDIR/
 	cd $BASE/disttmp/
 	zip -r $BINDIR.zip $BINDIR
 	cd $BASE
@@ -59,16 +60,17 @@ make_src() {
 
 case $1 in
     all)
-    make_src
-    make_bin
-    ;;
+		rm -rf disttmp
+		make_src
+		make_bin
+		;;
     src)
-    make_src
-    ;;
+		make_src
+		;;
     bin)
-    make_bin
-    ;;
+		make_bin
+		;;
     *)
-    echo "USAGE: $CMDNAME (all|src|bin)" 1>&2
-    ;;
+		echo "USAGE: $CMDNAME (all|src|bin)" 1>&2
+		;;
 esac
