@@ -199,7 +199,8 @@ short file_attr(const OEMCHAR *path)
 {
 	FILINFO *fi = &_fi;
 	
-	f_stat(path, fi);
+	if (f_stat(path, fi) != FR_OK)
+		return 0;
 
 	return fi->fattrib;
 }
