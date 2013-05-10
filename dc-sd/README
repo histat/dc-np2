@@ -14,8 +14,12 @@ you can create a font from a Windows Japanease font.
 
 Installation
 ------------
-put the BIOS, the fonts and image files in NP2 directory on your SD card.
+put BIOS,fonts and disc images in NP2 directory on your SD card,
+and run from CD or SD card.
 
+NOTE:
+1ST_READ.BIN - scrambled binary for selfbooting
+NP2.BIN - unscrambled binary for SD loader
 
 Controls
 --------
@@ -46,14 +50,14 @@ Neko Project II by NP2 developer team
 
 - Dreamcast Library
 
-Libronin - A Dreamcast development library
+ Libronin - A Dreamcast development library
 by Marcus Comstedt, Peter Bortas and Per Hedbor
 
 - FAT file system
 
  FatFs by ChaN
 
-- SD card schematic and the source
+ - SD card support
 
  SD Card interface for DC Serial by jj1odm
 
