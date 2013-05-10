@@ -586,9 +586,9 @@ static int main_menu(Menu *menu, int num_items)
 		}
 		if (ui_keypressed(JOY_A)) {
 
+			link_menu[menu_index].sel = sel;
+			
 			if (menu[sel].child) {
-
-				link_menu[menu_index].sel = sel;
 				++menu_index;
 				link_menu[menu_index].cur_menu = menu[sel].child;
 				link_menu[menu_index].sel = 0;
@@ -603,8 +603,13 @@ static int main_menu(Menu *menu, int num_items)
 			case MID_RESET:
 			case MID_EXIT:
 				return -1;
-			}
 
+			case MID_CONFIG:
+			case MID_SCREENOPT:
+			case MID_SNDOPT:
+			case MID_ABOUT:
+				return 0;
+			}
 		}
     
 		if (ui_keypressed(JOY_B)) {
