@@ -63,31 +63,6 @@ static const MENUPRM res_snd[] = {
 #endif
 };
 
-typedef struct {
-	UINT16	res;
-	UINT16	bit;
-	UINT8	*ptr;
-} CHECKTBL;
-
-static const CHECKTBL pad1opt[13] = {
-			{DID_JOYPAD1, 0, &np2oscfg.JOYPAD1},
-			{DID_PAD1_1A, 0, np2oscfg.JOY1BTN + 0},
-			{DID_PAD1_1B, 0, np2oscfg.JOY1BTN + 1},
-			{DID_PAD1_1C, 0, np2oscfg.JOY1BTN + 2},
-			{DID_PAD1_1D, 0, np2oscfg.JOY1BTN + 3},
-			{DID_PAD1_2A, 1, np2oscfg.JOY1BTN + 0},
-			{DID_PAD1_2B, 1, np2oscfg.JOY1BTN + 1},
-			{DID_PAD1_2C, 1, np2oscfg.JOY1BTN + 2},
-			{DID_PAD1_2D, 1, np2oscfg.JOY1BTN + 3},
-#if 0
-			{DID_PAD1_RA, 2, np2oscfg.JOY1BTN + 0},
-			{DID_PAD1_RB, 2, np2oscfg.JOY1BTN + 1},
-			{DID_PAD1_RC, 2, np2oscfg.JOY1BTN + 2},
-			{DID_PAD1_RD, 2, np2oscfg.JOY1BTN + 3}
-#endif
-};
-
-
 static int dlg_val[DID_PAD1_RD+1];
 
 static int menudlg_getval(MENUID id)
@@ -563,21 +538,6 @@ int snd_menu(Sound *menu, int num_items)
 		y = ui_height() - ui_font_height();
     
 		switch (result) {
-		case DID_PAD1_1A:
-		case DID_PAD1_1B:
-		case DID_PAD1_1C:
-		case DID_PAD1_1D:
-		case DID_PAD1_2A:
-		case DID_PAD1_2B:
-		case DID_PAD1_2C:
-		case DID_PAD1_2D:
-		case DID_PAD1_RA:
-		case DID_PAD1_RB:
-		case DID_PAD1_RC:
-		case DID_PAD1_RD:
-			ui_font_draw(x, y, 255, 255, 255, "A:Select B:Cancel");
-			break;
-      
 		default:
 			ui_font_draw(x, y, 255, 255, 255, "A:Select B:Back");
 		}

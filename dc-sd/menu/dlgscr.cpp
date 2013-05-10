@@ -779,7 +779,7 @@ int scr_menu(Screen *menu, int num_items)
 
 void dlgscr()
 {
-	Screen scrmenu[16];
+	Screen scrmenu[sizeof(res_scr3)/sizeof(res_scr3[0]];
 	int n;
 
 	menu_index = 0;

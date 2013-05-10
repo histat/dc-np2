@@ -563,21 +563,6 @@ int snd_menu(Sound *menu, int num_items)
 		y = ui_height() - ui_font_height();
     
 		switch (result) {
-		case DID_PAD1_1A:
-		case DID_PAD1_1B:
-		case DID_PAD1_1C:
-		case DID_PAD1_1D:
-		case DID_PAD1_2A:
-		case DID_PAD1_2B:
-		case DID_PAD1_2C:
-		case DID_PAD1_2D:
-		case DID_PAD1_RA:
-		case DID_PAD1_RB:
-		case DID_PAD1_RC:
-		case DID_PAD1_RD:
-			ui_font_draw(x, y, 255, 255, 255, "A:Select B:Cancel");
-			break;
-      
 		default:
 			ui_font_draw(x, y, 255, 255, 255, "A:Select B:Back");
 		}
