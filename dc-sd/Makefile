@@ -32,14 +32,15 @@ LIO		= ../lio
 FONT		= ../font
 GENERIC		= ../generic
 ZLIB		= ../zlib
-TARGET		= .
+TARGET		= ../dc
+TARGET2	=	.
 MENU		= ./menu
-SHASM		= ./sh
+SHASM		= ../dc/sh
 SDLIB	= ./lib
 
 
 HEADERS		= \
-	$(TARGET)/compiler.h $(BASE)/common.h $(COMMON)/milstr.h \
+	$(TARGET2)/compiler.h $(BASE)/common.h $(COMMON)/milstr.h \
 	$(COMMON)/_memory.h $(COMMON)/rect.h $(COMMON)/lstarray.h \
 	$(TARGET)/trace.h
 
@@ -79,7 +80,7 @@ ZLIBOBJ	= \
 	$(OBJ)/inflate.o $(OBJ)/inftrees.o $(OBJ)/zutil.o
 
 
-COPT	= -Wall -O8 -fomit-frame-pointer -fno-exceptions -I$(RONIN)/include -I$(TARGET)		\
+COPT	= -Wall -O8 -fomit-frame-pointer -fno-exceptions -I$(RONIN)/include -I$(TARGET2) -I$(TARGET)	\
 	-I$(BASE) -I$(COMMON) -I$(CODECNV) -I$(I286H) -I$(MEM) -I$(IO) -I$(CBUS) -I$(BIOS) 	\
 	-I$(LIO) -I$(VRAM) -I$(SOUND) -I$(VERMOUTH) -I$(GETSND) -I$(FDD) -I$(FONT) -I$(GENERIC) \
 	-I$(MENU) -I$(SDLIB)
@@ -162,14 +163,13 @@ DCOBJ	= $(OBJ)/strres.o $(OBJ)/milstr.o $(OBJ)/_memory.o		\
 	$(OBJ)/event.o $(OBJ)/dc_softkbd.o $(OBJ)/icon.o 		\
 	$(OBJ)/sysmenu.o $(OBJ)/dlgabout.o $(OBJ)/filesel.o		\
 	$(OBJ)/dlgcfg.o $(OBJ)/dlgscr.o  $(OBJ)/dlgsnd.o 		\
-	$(OBJ)/ui.o $(OBJ)/sci.o $(OBJ)/ff.o 					\
-	$(OBJ)/sd.o	$(OBJ)/crc.o $(OBJ)/cc932.o 				\
+	$(OBJ)/ui.o 						 					\
 
 
 ifeq "$(RELEASE_BUILD)" "1"
-DCLIB	= -L$(RONIN)/lib -lronin-noserial -lz -lm
+DCLIB	= -L$(SDLIB) -lsd -L$(RONIN)/lib -lronin-noserial -lz -lm
 else
-DCLIB	= -L$(RONIN)/lib -lronin -lz -lm
+DCLIB	= -L$(SDLIB) -lsd -L$(RONIN)/lib -lronin -lz -lm
 endif
 
 DCELF	= $(BIN)/np2.elf
@@ -235,14 +235,14 @@ $(OBJ)/strres.o		:	$(COMMON)/strres.c $(COMMON)/strres.h
 $(OBJ)/milstr.o		:	$(COMMON)/milstr.c $(HEADERS)
 	$(CC) $(COPT) -c $< -o $@
 
-$(OBJ)/_memory.o	:	$(COMMON)/_memory.c $(HEADERS) $(TARGET)/dosio.h
+$(OBJ)/_memory.o	:	$(COMMON)/_memory.c $(HEADERS) $(TARGET2)/dosio.h
 	$(CC) $(COPT) -c $< -o $@
 
-$(OBJ)/textfile.o	:	$(COMMON)/textfile.c $(HEADERS) $(TARGET)/dosio.h \
+$(OBJ)/textfile.o	:	$(COMMON)/textfile.c $(HEADERS) $(TARGET2)/dosio.h \
 						$(COMMON)/textfile.h
 	$(CC) $(COPT) -c $< -o $@
 
-$(OBJ)/profile.o	:	$(COMMON)/profile.c $(HEADERS) $(TARGET)/dosio.h \
+$(OBJ)/profile.o	:	$(COMMON)/profile.c $(HEADERS) $(TARGET2)/dosio.h \
 						$(COMMON)/textfile.h $(COMMON)/profile.h
 	$(CC) $(COPT) -c $< -o $@
 
@@ -255,7 +255,7 @@ $(OBJ)/lstarray.o	:	$(COMMON)/lstarray.c $(HEADERS)
 $(OBJ)/bmpdata.o	:	$(COMMON)/bmpdata.c $(HEADERS) $(COMMON)/bmpdata.h
 	$(CC) $(COPT) -c $< -o $@
 
-$(OBJ)/mimpidef.o	:	$(COMMON)/mimpidef.c $(HEADERS) $(TARGET)/dosio.h \
+$(OBJ)/mimpidef.o	:	$(COMMON)/mimpidef.c $(HEADERS) $(TARGET2)/dosio.h \
 						$(COMMON)/textfile.h $(COMMON)/mimpidef.h
 	$(CC) $(COPT) -c $< -o $@
 
@@ -265,11 +265,11 @@ $(OBJ)/parts.o		:	$(COMMON)/parts.c $(HEADERS)
 $(OBJ)/parts.oa		:	$(SHASM)/parts.s
 	$(AS) $(AOPT) $< -o $@
 
-$(OBJ)/arc.o		:	$(COMMON)/arc.c $(HEADERS) $(TARGET)/dosio.h \
+$(OBJ)/arc.o		:	$(COMMON)/arc.c $(HEADERS) $(TARGET2)/dosio.h \
 						$(COMMON)/arc.h $(COMMON)/arcunzip.h
 	$(CC) $(COPT) -c $< -o $@
 
-$(OBJ)/arcunzip.o	:	$(COMMON)/arcunzip.c $(HEADERS) $(TARGET)/dosio.h \
+$(OBJ)/arcunzip.o	:	$(COMMON)/arcunzip.c $(HEADERS) $(TARGET2)/dosio.h \
 						$(COMMON)/arc.h $(COMMON)/arcunzip.h $(ZLIBS)
 	$(CC) $(COPT) -c $< -o $@
 
@@ -518,18 +518,18 @@ $(OBJ)/cbuscore.o	:	$(CBUS)/cbuscore.c $(HEADERS) $(PCCORES) $(IOCORES) \
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/sasiio.o		:	$(CBUS)/sasiio.c $(HEADERS) $(PCCORES) $(IOCORES) \
-						$(TARGET)/dosio.h $(CBUS)/cbuscore.h \
+						$(TARGET2)/dosio.h $(CBUS)/cbuscore.h \
 						$(CBUS)/sasiio.h $(FDD)/sxsi.h $(CBUS)/sasibios.res
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/scsiio.o		:	$(CBUS)/scsiio.c $(HEADERS) $(PCCORES) $(IOCORES) \
-						$(TARGET)/dosio.h $(CBUS)/cbuscore.h \
+						$(TARGET2)/dosio.h $(CBUS)/cbuscore.h \
 						$(CBUS)/scsiio.h $(CBUS)/scsiio.tbl \
 						$(CBUS)/scsicmd.h $(CBUS)/scsibios.res
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/scsicmd.o	:	$(CBUS)/scsicmd.c $(HEADERS) $(PCCORES) $(IOCORES) \
-						$(TARGET)/dosio.h $(CBUS)/cbuscore.h \
+						$(TARGET2)/dosio.h $(CBUS)/cbuscore.h \
 						$(CBUS)/scsiio.h $(CBUS)/scsiio.tbl \
 						$(CBUS)/scsicmd.h $(FDD)/sxsi.h
 	$(CC) $(COPT) -c $< -o $@
@@ -592,7 +592,7 @@ $(OBJ)/cs4231io.o	:	$(CBUS)/cs4231io.c $(HEADERS) $(CPUCORES) $(PCCORES) \
 
 
 $(OBJ)/bios.o		:	$(BIOS)/bios.c $(HEADERS) $(CPUCORES) $(PCCORES) \
-						$(IOCORES) $(TARGET)/dosio.h $(BIOS)/bios.h \
+						$(IOCORES) $(TARGET2)/dosio.h $(BIOS)/bios.h \
 						$(BIOS)/biosmem.h $(BIOS)/fdfmt.h \
 						$(BIOS)/keytable.res $(BIOS)/itfrom.res \
 						$(BIOS)/startup.res $(BIOS)/biosfd80.res \
@@ -715,7 +715,7 @@ $(OBJ)/psggeng.oa	:	$(SHASM)/psggeng.s
 	$(AS) $(AOPT) $< -o $@
 
 $(OBJ)/rhythmc.o	:	$(SOUND)/rhythmc.c $(HEADERS) $(PCCORES) \
-						$(COMMON)/wavefile.h $(TARGET)/dosio.h \
+						$(COMMON)/wavefile.h $(TARGET2)/dosio.h \
 						$(SOUND)/sound.h $(SOUND)/rhythm.h
 	$(CC) $(COPT) -c $< -o $@
 
@@ -744,11 +744,11 @@ $(OBJ)/cs4231g.o	:	$(SOUND)/cs4231g.c $(HEADERS) $(CPUCORES) $(PCCORES) \
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/soundrom.o	:	$(SOUND)/soundrom.c $(HEADERS) $(CPUCORES) \
-						$(TARGET)/dosio.h $(SOUND)/soundrom.h
+						$(TARGET2)/dosio.h $(SOUND)/soundrom.h
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/s98.o		:	$(SOUND)/s98.c $(HEADERS) $(PCCORES) $(IOCORES) \
-						$(FMBOARDS) $(TARGET)/dosio.h $(SOUND)/sound.h \
+						$(FMBOARDS) $(TARGET2)/dosio.h $(SOUND)/sound.h \
 						$(SOUND)/s98.h
 	$(CC) $(COPT) -c $< -o $@
 
@@ -758,11 +758,11 @@ $(OBJ)/midiout.o	:	$(VERMOUTH)/midiout.c $(HEADERS) $(VERMOUTHS)
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/midimod.o	:	$(VERMOUTH)/midimod.c $(HEADERS) $(VERMOUTHS) \
-						$(COMMON)/textfile.h $(TARGET)/dosio.h 
+						$(COMMON)/textfile.h $(TARGET2)/dosio.h 
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/midinst.o	:	$(VERMOUTH)/midinst.c $(HEADERS) $(VERMOUTHS) \
-						$(TARGET)/dosio.h
+						$(TARGET2)/dosio.h
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/midvoice.o	:	$(VERMOUTH)/midvoice.c $(HEADERS) $(VERMOUTHS)
@@ -866,27 +866,27 @@ $(OBJ)/scrnsave.o	:	$(VRAM)/scrnsave.c $(HEADERS) $(PCCORES) $(IOCORES) \
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/diskdrv.o	:	$(FDD)/diskdrv.c $(HEADERS) $(PCCORES) $(IOCORES) \
-						$(TARGET)/dosio.h $(TARGET)/sysmng.h \
+						$(TARGET2)/dosio.h $(TARGET)/sysmng.h \
 						$(FDD)/diskdrv.h $(FDD)/fddfile.h
 	$(CC) $(COPT) -c $< -o $@
 
-$(OBJ)/newdisk.o	:	$(FDD)/newdisk.c $(HEADERS) $(TARGET)/dosio.h \
+$(OBJ)/newdisk.o	:	$(FDD)/newdisk.c $(HEADERS) $(TARGET2)/dosio.h \
 						$(FDD)/newdisk.h $(FDD)/fddfile.h $(FDD)/sxsi.h \
 						$(FDD)/hddboot.res
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/fddfile.o	:	$(FDD)/fddfile.c $(HEADERS) $(PCCORES) $(IOCORES) \
-						$(COMMON)/strres.h $(TARGET)/dosio.h \
+						$(COMMON)/strres.h $(TARGET2)/dosio.h \
 						$(TARGET)/sysmng.h $(FDD)/fddfile.h \
 						$(FDD)/fdd_xdf.h $(FDD)/fdd_d88.h
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/fdd_xdf.o	:	$(FDD)/fdd_xdf.c $(HEADERS) $(PCCORES) $(IOCORES) \
-						$(TARGET)/dosio.h $(FDD)/fddfile.h $(FDD)/fdd_xdf.h
+						$(TARGET2)/dosio.h $(FDD)/fddfile.h $(FDD)/fdd_xdf.h
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/fdd_d88.o	:	$(FDD)/fdd_d88.c $(HEADERS) $(PCCORES) $(IOCORES) \
-						$(TARGET)/dosio.h $(FDD)/fddfile.h $(FDD)/fdd_d88.h
+						$(TARGET2)/dosio.h $(FDD)/fddfile.h $(FDD)/fdd_d88.h
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/fdd_mtr.o	:	$(FDD)/fdd_mtr.c $(HEADERS) $(PCCORES) \
@@ -894,17 +894,17 @@ $(OBJ)/fdd_mtr.o	:	$(FDD)/fdd_mtr.c $(HEADERS) $(PCCORES) \
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/sxsi.o		:	$(FDD)/sxsi.c $(HEADERS) $(CPUCORES) $(PCCORES) \
-						$(COMMON)/strres.h $(TARGET)/dosio.h \
+						$(COMMON)/strres.h $(TARGET2)/dosio.h \
 						$(TARGET)/sysmng.h $(FDD)/sxsi.h
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/sxsihdd.o	:	$(FDD)/sxsihdd.c $(HEADERS) $(CPUCORES) $(PCCORES) \
-						$(COMMON)/strres.h $(TARGET)/dosio.h \
+						$(COMMON)/strres.h $(TARGET2)/dosio.h \
 						$(TARGET)/sysmng.h $(FDD)/sxsi.h
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/sxsicd.o		:	$(FDD)/sxsicd.c $(HEADERS) $(CPUCORES) $(PCCORES) \
-						$(COMMON)/strres.h $(TARGET)/dosio.h \
+						$(COMMON)/strres.h $(TARGET2)/dosio.h \
 						$(TARGET)/sysmng.h $(FDD)/sxsi.h
 	$(CC) $(COPT) -c $< -o $@
 
@@ -949,7 +949,7 @@ $(OBJ)/gput1.o		:	$(LIO)/gput1.c $(HEADERS) $(CPUCORES) $(LIO)/lio.h
 
 
 $(OBJ)/font.o		:	$(FONT)/font.c $(HEADERS) $(CPUCORES) \
-						$(COMMON)/strres.h $(TARGET)/dosio.h $(FONT)/font.h \
+						$(COMMON)/strres.h $(TARGET2)/dosio.h $(FONT)/font.h \
 						$(FONT)/fontdata.h $(FONT)/fontmake.h
 	$(CC) $(COPT) -c $< -o $@
 
@@ -958,33 +958,33 @@ $(OBJ)/fontdata.o	:	$(FONT)/fontdata.c $(HEADERS) $(CPUCORES) \
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/fontpc88.o	:	$(FONT)/fontpc88.c $(HEADERS) $(CPUCORES) \
-						$(TARGET)/dosio.h $(FONT)/font.h $(FONT)/fontdata.h
+						$(TARGET2)/dosio.h $(FONT)/font.h $(FONT)/fontdata.h
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/fontpc98.o	:	$(FONT)/fontpc98.c $(HEADERS) $(CPUCORES) \
-						$(COMMON)/bmpdata.h $(TARGET)/dosio.h \
+						$(COMMON)/bmpdata.h $(TARGET2)/dosio.h \
 						$(FONT)/font.h $(FONT)/fontdata.h
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/fontv98.o	:	$(FONT)/fontv98.c $(HEADERS) $(CPUCORES) \
-						$(TARGET)/dosio.h $(FONT)/font.h $(FONT)/fontdata.h
+						$(TARGET2)/dosio.h $(FONT)/font.h $(FONT)/fontdata.h
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/fontfm7.o	:	$(FONT)/fontfm7.c $(HEADERS) $(CPUCORES) \
-						$(TARGET)/dosio.h $(FONT)/font.h $(FONT)/fontdata.h
+						$(TARGET2)/dosio.h $(FONT)/font.h $(FONT)/fontdata.h
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/fontx1.o		:	$(FONT)/fontx1.c $(HEADERS) $(CPUCORES) \
-						$(COMMON)/parts.h $(TARGET)/dosio.h $(FONT)/font.h \
+						$(COMMON)/parts.h $(TARGET2)/dosio.h $(FONT)/font.h \
 						$(FONT)/fontdata.h
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/fontx68k.o	:	$(FONT)/fontx68k.c $(HEADERS) $(CPUCORES) \
-						$(TARGET)/dosio.h $(FONT)/font.h $(FONT)/fontdata.h
+						$(TARGET2)/dosio.h $(FONT)/font.h $(FONT)/fontdata.h
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/fontmake.o	:	$(FONT)/fontmake.c $(HEADERS) $(COMMON)/bmpdata.h \
-						$(COMMON)/parts.h $(TARGET)/dosio.h \
+						$(COMMON)/parts.h $(TARGET2)/dosio.h \
 						$(TARGET)/fontmng.h $(FONT)/font.h \
 						$(FONT)/fontdata.h $(FONT)/fontmake.h
 	$(CC) $(COPT) -c $< -o $@
@@ -1025,7 +1025,7 @@ $(OBJ)/hostdrv.o	:	$(GENERIC)/hostdrv.c $(HEADERS) $(CPUCORES) \
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/hostdrvs.o	:	$(GENERIC)/hostdrvs.c $(HEADERS) $(PCCORES) \
-						$(CODECNV)/codecnv.h $(TARGET)/dosio.h \
+						$(CODECNV)/codecnv.h $(TARGET2)/dosio.h \
 						$(GENERIC)/hostdrv.h $(GENERIC)/hostdrvs.h
 	$(CC) $(COPT) -c $< -o $@
 
@@ -1041,23 +1041,23 @@ $(OBJ)/np2info.o	:	$(GENERIC)/np2info.c $(HEADERS) $(CPUCORES) \
 
 
 
-$(OBJ)/np2.o		:	$(TARGET)/np2.cpp $(HEADERS) $(PCCORES) $(IOCORES) \
-						$(EMBEDS) $(COMMON)/strres.h $(TARGET)/np2.h \
-						$(TARGET)/dosio.h $(TARGET)/commng.h \
+$(OBJ)/np2.o		:	$(TARGET2)/np2.cpp $(HEADERS) $(PCCORES) $(IOCORES) \
+						$(EMBEDS) $(COMMON)/strres.h $(TARGET2)/np2.h \
+						$(TARGET2)/dosio.h $(TARGET)/commng.h \
 						$(TARGET)/scrnmng.h \
 						$(TARGET)/soundmng.h $(TARGET)/sysmng.h \
 						$(TARGET)/taskmng.h $(TARGET)/dckbd.h \
-						$(TARGET)/ini.h \
+						$(TARGET2)/ini.h \
 						$(VRAM)/scrndraw.h $(SOUND)/s98.h $(FDD)/diskdrv.h \
 						$(BASE)/timing.h $(BASE)/statsave.h
 	$(CC) $(COPT) -c $< -o $@
 
 
-$(OBJ)/dosio.o		:	$(TARGET)/dosio.cpp $(HEADERS) $(TARGET)/dosio.h
+$(OBJ)/dosio.o		:	$(TARGET2)/dosio.cpp $(HEADERS) $(TARGET2)/dosio.h
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/trace.o		:	$(TARGET)/trace.cpp $(HEADERS) $(COMMON)/strres.h \
-						$(TARGET)/dosio.h
+						$(TARGET2)/dosio.h
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/commng.o		:	$(TARGET)/commng.cpp $(HEADERS) $(TARGET)/commng.h \
@@ -1093,15 +1093,15 @@ $(OBJ)/dckbd.o		:	$(TARGET)/dckbd.cpp $(HEADERS) $(PCCORES) \
 						$(IOCORES) $(TARGET)/np2.h $(TARGET)/dckbd.h
 	$(CC) $(COPT) -c $< -o $@
 
-$(OBJ)/ini.o		:	$(TARGET)/ini.cpp $(HEADERS) $(PCCORES) \
+$(OBJ)/ini.o		:	$(TARGET2)/ini.cpp $(HEADERS) $(PCCORES) \
 						$(COMMON)/strres.h $(COMMON)/profile.h \
-						$(TARGET)/np2.h $(TARGET)/dosio.h $(TARGET)/ini.h
+						$(TARGET)/np2.h $(TARGET2)/dosio.h $(TARGET2)/ini.h
 	$(CC) $(COPT) -c $< -o $@
 
 
 $(OBJ)/pccore.o		:	$(BASE)/pccore.c $(HEADERS) $(CPUCORES) $(PCCORES) \
 						$(IOCORES) $(FMBOARDS) $(COMMON)/strres.h \
-						$(TARGET)/dosio.h $(TARGET)/soundmng.h \
+						$(TARGET2)/dosio.h $(TARGET)/soundmng.h \
 						$(TARGET)/sysmng.h $(TARGET)/timemng.h \
 						$(CBUS)/cbuscore.h $(CBUS)/pc9861k.h \
 						$(CBUS)/mpu98ii.h $(BIOS)/bios.h $(BIOS)/biosmem.h \
@@ -1133,7 +1133,7 @@ $(OBJ)/keystat.o	:	$(BASE)/keystat.c $(HEADERS) $(PCCORES) $(IOCORES) \
 
 $(OBJ)/statsave.o	:	$(BASE)/statsave.c $(HEADERS) $(CPUCORES) $(PCCORES) \
 						$(IOCORES) $(FMBOARDS) $(COMMON)/strres.h \
-						$(TARGET)/dosio.h $(TARGET)/commng.h \
+						$(TARGET2)/dosio.h $(TARGET)/commng.h \
 						$(TARGET)/scrnmng.h $(TARGET)/soundmng.h \
 						$(TARGET)/timemng.h $(CBUS)/cbuscore.h \
 						$(CBUS)/sasiio.h $(CBUS)/scsiio.h $(CBUS)/pc9861k.h \
@@ -1147,7 +1147,7 @@ $(OBJ)/statsave.o	:	$(BASE)/statsave.c $(HEADERS) $(CPUCORES) $(PCCORES) \
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/debugsub.o	:	$(BASE)/debugsub.c $(HEADERS) $(CPUCORES) $(PCCORES) \
-						$(IOCORES) $(COMMON)/strres.h $(TARGET)/dosio.h \
+						$(IOCORES) $(COMMON)/strres.h $(TARGET2)/dosio.h \
 						$(BASE)/debugsub.h
 	$(CC) $(COPT) -c $< -o $@
 
@@ -1169,10 +1169,7 @@ $(OBJ)/ui.o		:	 $(TARGET)/ui.cpp $(TARGET)/ui.h
 $(OBJ)/dc_softkbd.o		:	 $(TARGET)/dc_softkbd.cpp $(TARGET)/dc_softkbd.h
 	$(CC) $(COPT) -c $< -o $@
 
-$(OBJ)/vmu.o		:	 $(TARGET)/vmu.cpp $(TARGET)/vmu.h $(TARGET)/m4x8.h
-	$(CC) $(COPT) -c $< -o $@
-
-$(OBJ)/sysmenu.o		:	 $(TARGET)/sysmenu.cpp $(TARGET)/sysmenu.h
+$(OBJ)/sysmenu.o		:	 $(TARGET2)/sysmenu.cpp $(TARGET)/sysmenu.h
 	$(CC) $(COPT) -c $< -o $@
 
 $(OBJ)/dlgcfg.o		:	 $(MENU)/dlgcfg.cpp $(MENU)/dlgcfg.h
@@ -1189,19 +1186,3 @@ $(OBJ)/dlgabout.o		:	 $(MENU)/dlgabout.cpp $(MENU)/dlgabout.h
 
 $(OBJ)/filesel.o		:	 $(MENU)/filesel.cpp $(MENU)/filesel.h
 	$(CC) $(COPT) -c $< -o $@
-
-$(OBJ)/sci.o		:	 $(SDLIB)/sci.c $(SDLIB)/sci.h
-	$(CC) $(COPT) -c $< -o $@
-
-$(OBJ)/sd.o		:	 $(SDLIB)/sd.c $(SDLIB)/diskio.h $(SDLIB)/sci.h $(SDLIB)/crc.h
-	$(CC) $(COPT) -c $< -o $@
-
-$(OBJ)/ff.o		:	 $(SDLIB)/ff.c $(SDLIB)/ff.h $(SDLIB)/diskio.h
-	$(CC) $(COPT) -c $< -o $@
-
-$(OBJ)/crc.o		:	 $(SDLIB)/crc.c $(SDLIB)/crc.h
-	$(CC) $(COPT) -c $< -o $@
-
-$(OBJ)/cc932.o		:	 $(SDLIB)/cc932.c $(SDLIB)/ff.h
-	$(CC) $(COPT) -c $< -o $@
-

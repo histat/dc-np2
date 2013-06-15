@@ -34,7 +34,6 @@
 
 static void bmpsave()
 {
-#ifndef NOSERIAL
 	SCRNSAVE hdl;
 	char fname[32];
 	time_t long_time;
@@ -60,7 +59,6 @@ static void bmpsave()
 	//scrnsave_writegif(hdl, fname, SCRNSAVE_AUTO);
 	
 	scrnsave_trash(hdl);
-#endif
 }
 
 static void sys_cmd(MENUID id) {

@@ -1,5 +1,5 @@
 
-	.include	"sh/sdraw.inc"
+	.include	"../dc/sh/sdraw.inc"
 	.extern		_np2_pal16
 	.globl		_sdraw_getproctbl
 

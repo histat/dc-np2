@@ -1,5 +1,5 @@
 
-		.include	"sh/sdraw.inc"
+		.include	"../dc/sh/sdraw.inc"
 		.globl		_sdraw_getproctbl
 
 		.text
